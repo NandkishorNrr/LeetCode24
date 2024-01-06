@@ -1,4 +1,4 @@
-class Solution {
+public class Solution {
     public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
         int n = startTime.length;
         int[][] jobs = new int[n][3];
@@ -14,7 +14,9 @@ class Solution {
 
         for (int i = 1; i < n; i++) {
             int currentProfit = jobs[i][2];
-            int latestNonOverlap = findLatestNonOverlap(jobs, i);
+
+            // Binary search to find the latest non-overlapping job
+            int latestNonOverlap = binarySearch(jobs, i);
 
             if (latestNonOverlap != -1) {
                 currentProfit += dp[latestNonOverlap];
@@ -26,12 +28,23 @@ class Solution {
         return dp[n - 1];
     }
 
-    private int findLatestNonOverlap(int[][] jobs, int currentIndex) {
-        for (int i = currentIndex - 1; i >= 0; i--) {
-            if (jobs[i][1] <= jobs[currentIndex][0]) {
-                return i;
+    private int binarySearch(int[][] jobs, int currentIndex) {
+        int low = 0, high = currentIndex - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            if (jobs[mid][1] <= jobs[currentIndex][0]) {
+                if (jobs[mid + 1][1] <= jobs[currentIndex][0]) {
+                    low = mid + 1;
+                } else {
+                    return mid;
+                }
+            } else {
+                high = mid - 1;
             }
         }
+
         return -1;
     }
 }

@@ -15,30 +15,23 @@
  */
 public class Solution {
    public int rangeSumBST(TreeNode root, int low, int high) {
-    int sum = 0;
-
-    Stack<TreeNode> stack = new Stack<>();
-    stack.push(root);
-
-    while (!stack.isEmpty()) {
-        TreeNode node = stack.pop();
-
-        if (node != null) {
-            if (node.val >= low && node.val <= high) {
-                sum += node.val;
-            }
-
-            if (node.val > low) {
-                stack.push(node.left);
-            }
-
-            if (node.val < high) {
-                stack.push(node.right);
-            }
-        }
+    if (root == null) {
+        return 0;
     }
 
-    return sum;
+    int currentVal = 0;
 
+    if (root.val >= low && root.val <= high) {
+        currentVal = root.val;
+    }
+
+    if (root.val > low) {
+        currentVal += rangeSumBST(root.left, low, high);
+    }
+
+    if (root.val < high) 
+        currentVal += rangeSumBST(root.right, low, high);
+
+    return currentVal;
     }
 }

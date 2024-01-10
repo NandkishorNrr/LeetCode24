@@ -14,17 +14,19 @@
  * }
  */
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
 
 class Solution {
-    private Map<Integer, List<Integer>> adjacencyList = new HashMap<>();
 
     public int amountOfTime(TreeNode root, int start) {
-        convertToGraph(root);
-        Queue<Integer> queue = new LinkedList<>();
-        Set<Integer> visited = new HashSet<>();
+        if (root == null) {
+            return 0;
+        }
 
-        queue.offer(start);
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
         int time = -1;
 
         while (!queue.isEmpty()) {
@@ -32,36 +34,22 @@ class Solution {
             time++;
 
             for (int i = 0; i < size; i++) {
-                int currentNode = queue.poll();
-                visited.add(currentNode);
+                TreeNode currentNode = queue.poll();
 
-                for (int neighbor : adjacencyList.getOrDefault(currentNode, Collections.emptyList())) {
-                    if (!visited.contains(neighbor)) {
-                        queue.offer(neighbor);
-                    }
+                if (currentNode.val == start) {
+                    return time;
+                }
+
+                if (currentNode.left != null) {
+                    queue.offer(currentNode.left);
+                }
+
+                if (currentNode.right != null) {
+                    queue.offer(currentNode.right);
                 }
             }
         }
 
-        return time;
-    }
-
-    private void convertToGraph(TreeNode node) {
-        if (node == null) {
-            return;
-        }
-
-        if (node.left != null) {
-            adjacencyList.computeIfAbsent(node.val, k -> new ArrayList<>()).add(node.left.val);
-            adjacencyList.computeIfAbsent(node.left.val, k -> new ArrayList<>()).add(node.val);
-        }
-
-        if (node.right != null) {
-            adjacencyList.computeIfAbsent(node.val, k -> new ArrayList<>()).add(node.right.val);
-            adjacencyList.computeIfAbsent(node.right.val, k -> new ArrayList<>()).add(node.val);
-        }
-
-        convertToGraph(node.left);
-        convertToGraph(node.right);
+        return -1; // Node not found, or the tree is empty
     }
 }

@@ -14,42 +14,56 @@
  * }
  */
 
-import java.util.LinkedList;
-import java.util.Queue;
+
+
+import java.util.*;
 
 class Solution {
-
     public int amountOfTime(TreeNode root, int start) {
-        if (root == null) {
-            return 0;
-        }
+        Map<Integer, Set<Integer>> map = new HashMap<>();
+        convert(root, 0, map);
+        Queue<Integer> q = new LinkedList<>();
+        q.add(start);
+        int minute = 0;
+        Set<Integer> visited = new HashSet<>();
+        visited.add(start);
 
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(root);
+        while (!q.isEmpty()) {
+            int levelSize = q.size();
+            while (levelSize > 0) {
+                int current = q.poll();
 
-        int time = -1;
-
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            time++;
-
-            for (int i = 0; i < size; i++) {
-                TreeNode currentNode = queue.poll();
-
-                if (currentNode.val == start) {
-                    return time;
+                for (int num : map.get(current)) {
+                    if (!visited.contains(num)) {
+                        visited.add(num);
+                        q.add(num);
+                    }
                 }
-
-                if (currentNode.left != null) {
-                    queue.offer(currentNode.left);
-                }
-
-                if (currentNode.right != null) {
-                    queue.offer(currentNode.right);
-                }
+                levelSize--;
             }
+            minute++;
         }
+        return minute - 1;
+    }
 
-        return -1; // Node not found, or the tree is empty
+    void convert(TreeNode current, int parent, Map<Integer, Set<Integer>> map) {
+        if (current == null) {
+            return;
+        } 
+        if (!map.containsKey(current.val)) {
+            map.put(current.val, new HashSet<>());
+        }
+        Set<Integer> adjacentList = map.get(current.val);
+        if (parent != 0) {
+            adjacentList.add(parent);
+        } 
+        if (current.left != null) {
+            adjacentList.add(current.left.val);
+        } 
+        if (current.right != null) {
+            adjacentList.add(current.right.val);
+        }
+        convert(current.left, current.val, map);
+        convert(current.right, current.val, map);
     }
 }

@@ -13,32 +13,36 @@
  *     }
  * }
  */
+
+import java.util.*;
+
 class Solution {
     private Map<Integer, List<Integer>> adjacencyList = new HashMap<>();
 
     public int amountOfTime(TreeNode root, int start) {
         convertToGraph(root);
-        Deque<Integer> queue = new ArrayDeque<>();
+        Queue<Integer> queue = new LinkedList<>();
         Set<Integer> visited = new HashSet<>();
-      
+
         queue.offer(start);
-        int time = -1; 
-      
+        int time = -1;
+
         while (!queue.isEmpty()) {
+            int size = queue.size();
             time++;
-            for (int i = queue.size(); i > 0; i--) {
-                int currentNode = queue.pollFirst();
+
+            for (int i = 0; i < size; i++) {
+                int currentNode = queue.poll();
                 visited.add(currentNode);
-              
-                if (adjacencyList.containsKey(currentNode)) {
-                    for (int neighbor : adjacencyList.get(currentNode)) {
-                        if (!visited.contains(neighbor)) {
-                            queue.offer(neighbor);
-                        }
+
+                for (int neighbor : adjacencyList.getOrDefault(currentNode, Collections.emptyList())) {
+                    if (!visited.contains(neighbor)) {
+                        queue.offer(neighbor);
                     }
                 }
             }
         }
+
         return time;
     }
 
@@ -46,18 +50,17 @@ class Solution {
         if (node == null) {
             return;
         }
-      
+
         if (node.left != null) {
             adjacencyList.computeIfAbsent(node.val, k -> new ArrayList<>()).add(node.left.val);
             adjacencyList.computeIfAbsent(node.left.val, k -> new ArrayList<>()).add(node.val);
         }
-      
+
         if (node.right != null) {
             adjacencyList.computeIfAbsent(node.val, k -> new ArrayList<>()).add(node.right.val);
             adjacencyList.computeIfAbsent(node.right.val, k -> new ArrayList<>()).add(node.val);
         }
-      
-        
+
         convertToGraph(node.left);
         convertToGraph(node.right);
     }

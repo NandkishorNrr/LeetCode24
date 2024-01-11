@@ -14,24 +14,28 @@
  * }
  */
 public class Solution {
+    private int maxDiff;
+
     public int maxAncestorDiff(TreeNode root) {
-        return dfs(root, root.val, root.val);
+        maxDiff = 0;
+        dfs(root, root.val, root.val);
+        return maxDiff;
     }
 
-    private int dfs(TreeNode node, int max, int min) {
+    private void dfs(TreeNode node, int max, int min) {
         if (node == null) {
-            return max - min;
+            return;
         }
 
         // Update max and min values encountered so far
         max = Math.max(max, node.val);
         min = Math.min(min, node.val);
 
-        // Recursively explore left and right subtrees
-        int leftDiff = dfs(node.left, max, min);
-        int rightDiff = dfs(node.right, max, min);
+        // Update maxDiff if the current node contributes to a greater difference
+        maxDiff = Math.max(maxDiff, Math.max(Math.abs(node.val - max), Math.abs(node.val - min)));
 
-        // Return the maximum difference from left and right subtrees
-        return Math.max(leftDiff, rightDiff);
+        // Recursively explore left and right subtrees
+        dfs(node.left, max, min);
+        dfs(node.right, max, min);
     }
 }

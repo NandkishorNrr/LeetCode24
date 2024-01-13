@@ -1,21 +1,28 @@
 public class Solution {
     public int minSteps(String s, String t) {
-        int[] countS = new int[26];
-        int[] countT = new int[26];
+        if (s.length() != t.length()) {
+            throw new IllegalArgumentException("Input strings must have the same length");
+        }
 
+        int[] charCount = new int[26];
+
+        // Count the frequency of characters in the first string
         for (char ch : s.toCharArray()) {
-            countS[ch - 'a']++;
+            charCount[ch - 'a']++;
         }
 
+        // Decrement the count for each character in the second string
         for (char ch : t.toCharArray()) {
-            countT[ch - 'a']++;
+            charCount[ch - 'a']--;
         }
 
-        int steps = 0;
-        for (int i = 0; i < 26; i++) {
-            steps += Math.abs(countS[i] - countT[i]);
+        // Calculate the total steps needed
+        int totalSteps = 0;
+        for (int count : charCount) {
+            totalSteps += Math.abs(count);
         }
 
-        return steps / 2;  
+        // Divide by 2 as we are counting the differences twice (in both strings)
+        return totalSteps / 2;
     }
 }

@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 class Solution {
     public boolean closeStrings(String word1, String word2) {
         if (word1.length() != word2.length())
@@ -7,19 +5,28 @@ class Solution {
 
         int[] charCount1 = new int[26];
         int[] charCount2 = new int[26];
-        boolean[] charPresent1 = new boolean[26];
-        boolean[] charPresent2 = new boolean[26];
+        int[] presentInWord1 = new int[26];
+        int[] presentInWord2 = new int[26];
 
-        for (int i = 0; i < word1.length(); i++) {
-            charCount1[word1.charAt(i) - 'a']++;
-            charPresent1[word1.charAt(i) - 'a'] = true;
-            charCount2[word2.charAt(i) - 'a']++;
-            charPresent2[word2.charAt(i) - 'a'] = true;
+        for (char c : word1.toCharArray()) {
+            charCount1[c - 'a']++;
+            presentInWord1[c - 'a'] = 1;
         }
 
-        Arrays.sort(charCount1);
-        Arrays.sort(charCount2);
+        for (char c : word2.toCharArray()) {
+            charCount2[c - 'a']++;
+            presentInWord2[c - 'a'] = 1;
+        }
 
-        return Arrays.equals(charCount1, charCount2) && Arrays.equals(charPresent1, charPresent2);
+        for (int i = 0; i < 26; i++) {
+            if ((charCount1[i] == 0 && charCount2[i] != 0) ||
+                (charCount1[i] != 0 && charCount2[i] == 0) ||
+                (presentInWord1[i] == 0 && presentInWord2[i] != 0) ||
+                (presentInWord1[i] != 0 && presentInWord2[i] == 0)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

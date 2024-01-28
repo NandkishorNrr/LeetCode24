@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 class Solution {
     public int numSubmatrixSumTarget(int[][] matrix, int target) {
         int m = matrix.length;
@@ -19,15 +22,15 @@ class Solution {
                 // Map to store the frequency of prefix sums
                 Map<Integer, Integer> sumCount = new HashMap<>();
                 sumCount.put(0, 1);
-                
+
                 // Iterate over all possible pairs of columns
                 for (int k = 1; k <= n; k++) {
                     int currentSum = prefixSum[j][k] - prefixSum[i - 1][k];
                     int complement = currentSum - target;
-                    
+
                     // Check if complement exists in the map
                     count += sumCount.getOrDefault(complement, 0);
-                    
+
                     // Update the map with the current prefix sum
                     sumCount.put(currentSum, sumCount.getOrDefault(currentSum, 0) + 1);
                 }

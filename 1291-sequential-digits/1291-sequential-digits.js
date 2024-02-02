@@ -5,28 +5,29 @@
  */
 var sequentialDigits = function(low, high) {
     const result = [];
+    const digits = "123456789";
     
-    // Helper function to generate sequential digits starting from a given digit
-    function generateSequential(startDigit, current, low, high) {
-        if (current > high) {
-            return;
-        }
-        
-        if (current >= low && current <= high) {
-            result.push(current);
-        }
-        
-        const nextDigit = startDigit + 1;
-        
-        if (nextDigit <= 9) {
-            generateSequential(nextDigit, current * 10 + nextDigit, low, high);
+    const numDigitsLow = low.toString().length;
+    const numDigitsHigh = high.toString().length;
+
+    for (let i = numDigitsLow; i <= numDigitsHigh; i++) {
+        for (let j = 1; j <= 9 - i + 1; j++) {
+            const num = generateSequential(j, i);
+            if (num >= low && num <= high) {
+                result.push(num);
+            }
         }
     }
-    
-    // Iterate over all digits to start the sequence
-    for (let i = 1; i <= 9; i++) {
-        generateSequential(i, i, low, high);
-    }
-    
-    return result.sort((a, b) => a - b);
+
+    return result;
 };
+
+// Helper function to generate sequential digits starting from a given digit
+function generateSequential(startDigit, numDigits) {
+    let result = 0;
+    for (let i = 0; i < numDigits; i++) {
+        result = result * 10 + (startDigit + i);
+    }
+    return result;
+}
+

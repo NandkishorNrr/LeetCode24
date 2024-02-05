@@ -23,8 +23,3 @@ var firstUniqChar = function(s) {
     // If no unique character is found
     return result === s.length ? -1 : result;
 };
-
-// Example usage:
-console.log(firstUniqChar("leetcode"));      // Output: 0
-console.log(firstUniqChar("loveleetcode"));   // Output: 2
-console.log(firstUniqChar("aabb"));           // Output: -1

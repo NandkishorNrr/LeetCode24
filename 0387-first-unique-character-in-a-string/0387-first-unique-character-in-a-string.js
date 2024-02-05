@@ -1,18 +1,30 @@
 var firstUniqChar = function(s) {
-    const charFrequency = new Map();
+    const charIndex = new Map();
 
-    // Count the frequency of each character
-    for (const char of s) {
-        charFrequency.set(char, (charFrequency.get(char) || 0) + 1);
+    // Iterate through the string to store the index of each character
+    for (let i = 0; i < s.length; i++) {
+        const char = s[i];
+        
+        if (charIndex.has(char)) {
+            charIndex.set(char, -1); // Mark as repeated
+        } else {
+            charIndex.set(char, i); // Store the index of the first occurrence
+        }
     }
 
-    // Find the first character with frequency 1
-    for (let i = 0; i < s.length; i++) {
-        if (charFrequency.get(s[i]) === 1) {
-            return i;
+    // Find the minimum index of characters that occurred only once
+    let result = s.length;
+    for (const index of charIndex.values()) {
+        if (index !== -1 && index < result) {
+            result = index;
         }
     }
 
     // If no unique character is found
-    return -1;
+    return result === s.length ? -1 : result;
 };
+
+// Example usage:
+console.log(firstUniqChar("leetcode"));      // Output: 0
+console.log(firstUniqChar("loveleetcode"));   // Output: 2
+console.log(firstUniqChar("aabb"));           // Output: -1

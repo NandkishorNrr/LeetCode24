@@ -3,24 +3,24 @@
  * @return {string[][]}
  */
 var groupAnagrams = function(strs) {
-    // Create a map to store groups of anagrams
     const anagramGroups = new Map();
 
-    // Iterate through each string in the input array
     for (const s of strs) {
-        // Sort the characters in the string to create a unique key for anagrams
-        const sortedS = s.split('').sort().join('');
+        const charCount = new Array(26).fill(0);
 
-        // If the sorted key is already in the map, add the string to the existing group
-        if (anagramGroups.has(sortedS)) {
-            anagramGroups.get(sortedS).push(s);
+        for (const char of s) {
+            charCount[char.charCodeAt(0) - 'a'.charCodeAt(0)]++;
+        }
+
+        const key = charCount.join(',');
+
+        if (anagramGroups.has(key)) {
+            anagramGroups.get(key).push(s);
         } else {
-            // If the key is not in the map, create a new group with the current string
-            anagramGroups.set(sortedS, [s]);
+            anagramGroups.set(key, [s]);
         }
     }
 
-    // Convert the map values (groups of anagrams) to an array
     const result = Array.from(anagramGroups.values());
 
     return result;

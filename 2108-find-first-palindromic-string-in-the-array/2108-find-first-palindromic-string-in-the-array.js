@@ -18,3 +18,6 @@ var firstPalindrome = function(words) {
     return ""; // Return empty string if no palindrome found
 };
 
+// Example usage:
+const words = ["hello", "racecar", "world", "level"];
+console.log(firstPalindrome(words)); // Output: "racecar"
